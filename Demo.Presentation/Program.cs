@@ -1,4 +1,6 @@
+using Demo.BusinessLogic.Services;
 using Demo.DataAccess.Data.Contexts;
+using Demo.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.Presentation
@@ -19,6 +21,9 @@ namespace Demo.Presentation
                 //options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["DefaultConnection"]);
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddScoped<DepartmentRepository>();//3.Register To Services In DI Container
+           builder.Services.AddScoped<IDepartmentRepository , DepartmentRepository>();
             #endregion
 
             var app = builder.Build();

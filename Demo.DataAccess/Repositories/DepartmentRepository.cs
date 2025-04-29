@@ -7,24 +7,23 @@ using Demo.DataAccess.Data.Contexts;
 
 namespace Demo.DataAccess.Repositories
 {
-    internal class DepartmentRepository(ApplicationDbContext dbContext)
+    public class DepartmentRepository(ApplicationDbContext dbContext) : IDepartmentRepository
     {
         private readonly ApplicationDbContext _dbContext = dbContext;
 
         //CRUD
         //Get All
-        public IEnumerable<Department> GetAll(bool WithTracking)
+        public IEnumerable<Department> GetAll(bool WithTracking=false)
         {
-            if(WithTracking)
+            if (WithTracking)
                 return _dbContext.Departments.ToList();
             else
                 return _dbContext.Departments.AsNoTracking().ToList();
-        } 
+        }
         //Get By Id
         public Department? GetById(int id)
         {
-            var department = _dbContext.Departments.Find(id);
-            return department;
+            return _dbContext.Departments.Find(id);
         }
         //Insert
         public int Insert(Department department)
