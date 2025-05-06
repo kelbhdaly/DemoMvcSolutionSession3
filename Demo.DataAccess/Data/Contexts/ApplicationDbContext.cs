@@ -1,13 +1,14 @@
 ﻿
 
+using Demo.DataAccess.Models.DepartmentModel;
 using System.Reflection;
 
 namespace Demo.DataAccess.Data.Contexts
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> Options) : DbContext(Options)
     {
+       
 
-        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -18,5 +19,7 @@ namespace Demo.DataAccess.Data.Contexts
 
 
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+
     }
 }

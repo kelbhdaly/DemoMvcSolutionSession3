@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Demo.BusinessLogic.DataTransferObject;
+using Demo.BusinessLogic.DataTransferObject.Department;
 using Demo.BusinessLogic.Factories;
+using Demo.BusinessLogic.Services.Interfaces;
 using Demo.DataAccess.Models;
-using Demo.DataAccess.Repositories;
+using Demo.DataAccess.Repositories.Interfaces;
 
-namespace Demo.BusinessLogic.Services
+namespace Demo.BusinessLogic.Services.Classes
 {
-   public class DepartmentServices(IDepartmentRepository _departmentRepository) : IDepartmentServices
+    public class DepartmentServices(IDepartmentRepository _departmentRepository) : IDepartmentServices
     {
         //Get All Department
         public IEnumerable<DepartmentDto> GetAllDepartment()
@@ -22,6 +23,7 @@ namespace Demo.BusinessLogic.Services
         public DepartmentDetailsDto? GetDepartmentById(int id)
         {
             var department = _departmentRepository.GetById(id);
+            #region Code
             //if (department == null) return null;
             //else
             //{
@@ -34,7 +36,9 @@ namespace Demo.BusinessLogic.Services
             //    };
 
             //    return departmentToReturn;
-            //}
+            //} 
+            #endregion
+
             return department is null ? null : department.ToDepartmentDetailsDto();
 
         }
