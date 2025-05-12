@@ -1,9 +1,12 @@
-﻿using Demo.BusinessLogic.DataTransferObject.Employee;
+﻿using AutoMapper;
+using Demo.BusinessLogic.DataTransferObject.Department;
+using Demo.BusinessLogic.DataTransferObject.Employee;
 using Demo.BusinessLogic.DataTransferObject.EmployeeDto;
 using Demo.BusinessLogic.Factories;
 using Demo.BusinessLogic.Services.Interfaces;
 using Demo.DataAccess.Models.EmployeeModel;
 using Demo.DataAccess.Repositories.Classes;
+using Demo.DataAccess.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,35 +15,39 @@ using System.Threading.Tasks;
 
 namespace Demo.BusinessLogic.Services.Classes
 {
-    public class EmployeeServices(EmployeeRepository _employeeRepository) : IEmployeeServices
+    public class EmployeeServices(IEmployeeRepository _employeeRepository, IMapper _mapper) : IEmployeeServices
     {
-        //Get All Employee
-        public IEnumerable<GetAllEmployeeDto> GetAllEmployee()
-        {
-            var employees = _employeeRepository.GetAll(false);
-            return employees.Select(E => E.ToGetAllEmployee());
 
+
+
+        public IEnumerable<EmployeeDto> GetAllEmployee(bool WithTracking = false)
+        {
+            var employees = _employeeRepository.GetAll(WithTracking);
+            //Src = Employee
+            //Dest = EmployeeDto
+            var EmployeesDto = _mapper.Map<IEnumerable<Employee>, IEnumerable<EmployeeDto>>(employees);
+            return EmployeesDto;
         }
-        //Get Employee By Id
-        public GetEmployeeById? GetEmployeeByID(int id)
+
+        public EmployeeDetailsDto? GetEmployeeById(int id)
         {
             var employee = _employeeRepository.GetById(id);
-            return employee is null ? null : employee.GetGetAllEmployeeById();
+            //return employee is null ? null : employee.GetGetAllEmployeeById
+            return employee is null ? null : _mapper.Map<Employee, EmployeeDetailsDto>(employee);
+
         }
 
-        //Add Employee 
-        public int AddEmployee(DmlEmployeeDto employeeDto)
+        public int CreateEmployee(CreateEmployeeDto employeeDto)
         {
-            var employee = employeeDto.CreateEmployee();
+            var employee = _mapper.Map<CreateEmployeeDto, Employee>(employeeDto);
             return _employeeRepository.Insert(employee);
         }
         //Update Employee
-        public int UpdateEmployee(DmlEmployeeDto employeeDto)
+        public int UpdateEmployee(UpdateEmployeeDto updateEmployeeDto)
         {
-            return _employeeRepository.Update(employeeDto.CreateEmployee());
+            var employee = _mapper.Map<UpdateEmployeeDto, Employee>(updateEmployeeDto);
+            return _employeeRepository.Update(employee);
         }
-
-
         //Delete Employee
         public bool DeleteEmployee(int id)
         {
@@ -48,8 +55,9 @@ namespace Demo.BusinessLogic.Services.Classes
             if (emp is null) return false;
             else
             {
-                var Result = _employeeRepository.Remove(emp);
-                return Result > 0 ? true : false;
+                emp.IsDeleted = true;
+                return _employeeRepository.Update(emp) > 0 ? true : false;
+
             }
         }
     }

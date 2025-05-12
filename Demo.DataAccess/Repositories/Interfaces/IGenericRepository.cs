@@ -3,6 +3,7 @@ using Demo.DataAccess.Models.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,5 +17,6 @@ namespace Demo.DataAccess.Repositories.Interfaces
         int Remove(TEntity entity);
         int Update(TEntity entity);
 
+        IEnumerable<TResult> GetAll<TResult>(Expression<Func<TEntity , TResult>> selector);
     }
 }

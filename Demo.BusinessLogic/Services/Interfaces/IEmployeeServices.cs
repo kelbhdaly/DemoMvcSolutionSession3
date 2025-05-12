@@ -1,4 +1,5 @@
-﻿using Demo.BusinessLogic.DataTransferObject.EmployeeDto;
+﻿using Demo.BusinessLogic.DataTransferObject.Employee;
+using Demo.BusinessLogic.DataTransferObject.EmployeeDto;
 using Demo.DataAccess.Models.EmployeeModel;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,14 @@ using System.Threading.Tasks;
 
 namespace Demo.BusinessLogic.Services.Interfaces
 {
-    internal interface IEmployeeServices
+    public interface IEmployeeServices
     {
         //Get All Employee
-        IEnumerable<GetAllEmployeeDto> GetAllEmployee();
+        IEnumerable<EmployeeDto> GetAllEmployee(bool WithTracking = false);
+        //employee Details
+        EmployeeDetailsDto GetEmployeeById(int id);
+        int CreateEmployee(CreateEmployeeDto employeeDto);
+        int UpdateEmployee(UpdateEmployeeDto updateEmployeeDto);
+        bool DeleteEmployee(int id);
     }
 }

@@ -56,6 +56,7 @@ namespace Demo.Presentation.Controllers
 
         }
         #endregion
+
         #region Details
         [HttpGet]
         public IActionResult Details(int? id)
