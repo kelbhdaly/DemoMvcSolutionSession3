@@ -1,21 +1,19 @@
 ﻿using Demo.DataAccess.Models.EmployeeModel;
+using Demo.DataAccess.Models.Shared;
 using Demo.DataAccess.Models.Shared.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Demo.BusinessLogic.DataTransferObject.Employee
+namespace Demo.Presentation.ViewModels.EmployeeViewModel
 {
-    public class CreateEmployeeDto
+    public class EmployeeViewModel 
     {
-        [Required(ErrorMessage ="Name Can't Be Null")]
-        [MaxLength(50,ErrorMessage = "Max Length Should be 50")]
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Name Can't Be Null")]
+        [MaxLength(50, ErrorMessage = "Max Length Should be 50")]
         [MinLength(5, ErrorMessage = "Min Length Should be 5")]
         public string Name { get; set; } = null!;
-        [Range(22,35)]
+        [Range(22, 35)]
         public int Age { get; set; }
         [RegularExpression("^[1-9]{1,3}-[a-zA-Z]{5,10}-[a-zA-Z]{5,10}-[a-zA-Z]{5,10}$",
             ErrorMessage = "Address must be like 123-Street-City-Country")]
@@ -34,7 +32,11 @@ namespace Demo.BusinessLogic.DataTransferObject.Employee
         public DateOnly HiringDate { get; set; }
         public int LastModifiedBy { get; set; }//User Id
         public int CreateBy { get; set; } //User Id
+        public DateTime CreatedOn { get; set; }
+        public DateTime? LastModifiedOn { get; set; }
+        [Display(Name = "Department")]
         public int? DepartmentId { get; set; }
+        public string? Department { get; set; }
 
     }
 }

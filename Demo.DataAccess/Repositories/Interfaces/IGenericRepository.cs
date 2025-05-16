@@ -13,10 +13,11 @@ namespace Demo.DataAccess.Repositories.Interfaces
     {
         IEnumerable<TEntity> GetAll(bool WithTracking);
         TEntity? GetById(int id);
-        int Insert(TEntity entity);
-        int Remove(TEntity entity);
-        int Update(TEntity entity);
+        void Insert(TEntity entity);
+        void Remove(TEntity entity);
+        void Update(TEntity entity);
 
         IEnumerable<TResult> GetAll<TResult>(Expression<Func<TEntity , TResult>> selector);
+        IEnumerable<TEntity> GetAll(Expression<Func<TEntity , bool>> Predicate);
     }
 }

@@ -4,31 +4,58 @@ using Demo.BusinessLogic.Services.Interfaces;
 using Demo.DataAccess.Models.EmployeeModel;
 using Demo.DataAccess.Models.Shared.Enums;
 using Demo.DataAccess.Repositories.Interfaces;
+using Demo.Presentation.ViewModels.EmployeeViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Presentation.Controllers
 {
     public class EmployeesController(IEmployeeServices _employeeServices,
          ILogger<EmployeesController> _logger,
-        IWebHostEnvironment _environment) : Controller
+        IWebHostEnvironment _environment
+        ) : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index( string? EmployeeSearchName)
         {
-            var Employees = _employeeServices.GetAllEmployee();
+            var Employees = _employeeServices.GetAllEmployee(EmployeeSearchName);
             return View(Employees);
         }
 
         #region create employee
         [HttpGet]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create() => View();
+        public IActionResult Create()
+        {
+
+            //var Departments = _departmentServices.GetAllDepartment();
+            return View();
+
+
+
+           }
         [HttpPost]
-        public IActionResult Create(CreateEmployeeDto employeeDto)
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(EmployeeViewModel employeeViewModel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var employeeDto = new CreateEmployeeDto()
+                    {
+                        Name = employeeViewModel.Name,
+                        Age = employeeViewModel.Age,
+                        Address = employeeViewModel.Address,
+                        Email = employeeViewModel.Email,
+                        IsActive = employeeViewModel.IsActive,
+                        Salary = employeeViewModel.Salary,
+                        PhoneNumber = employeeViewModel.PhoneNumber,
+                        EmployeeType = employeeViewModel.EmployeeType,
+                        Gender = employeeViewModel.Gender,
+                        HiringDate = employeeViewModel.HiringDate,
+                        DepartmentId = employeeViewModel.DepartmentId,
+
+
+                    };
+
                     var Result = _employeeServices.CreateEmployee(employeeDto);
                     if (Result > 0)
                     {
@@ -53,7 +80,7 @@ namespace Demo.Presentation.Controllers
                         _logger.LogError(ex.Message);
                 }
             }
-            return View(employeeDto);
+            return View(employeeViewModel);
         }
 
         #endregion
@@ -66,8 +93,23 @@ namespace Demo.Presentation.Controllers
             if (!id.HasValue) return BadRequest();
             var employee = _employeeServices.GetEmployeeById(id.Value);
             if (employee is null) return NotFound();
-            else
-                return View(employee);
+            var employeeDetails = new EmployeeViewModel()
+            {
+                Name = employee.Name,
+                Age = employee.Age,
+                Address = employee.Address,
+                Email = employee.Email,
+                CreateBy = employee.CreateBy,
+                IsActive = employee.IsActive,
+                LastModifiedBy = employee.LastModifiedBy,
+                Salary = employee.Salary,
+                PhoneNumber = employee.PhoneNumber,
+                HiringDate = employee.HiringDate,
+                EmployeeType = Enum.Parse<EmployeeType>(employee.EmployeeType),
+                Gender = Enum.Parse<Gender>(employee.Gender),
+                Department = employee.Department
+            };
+            return View(employeeDetails);
         }
         #endregion
 
@@ -79,7 +121,7 @@ namespace Demo.Presentation.Controllers
             if (!id.HasValue) return BadRequest();
             var employee = _employeeServices.GetEmployeeById(id.Value);
             if (employee is null) return NotFound();
-            var employeeDto = new UpdateEmployeeDto()
+            var employeeDto = new EmployeeViewModel()
             {
                 Id = employee.Id,
                 Name = employee.Name,
@@ -92,19 +134,35 @@ namespace Demo.Presentation.Controllers
                 HiringDate = employee.HiringDate,
                 Gender = Enum.Parse<Gender>(employee.Gender),
                 EmployeeType = Enum.Parse<EmployeeType>(employee.EmployeeType),
-
+                DepartmentId = employee.DepartmentId
             };
             return View(employeeDto);
         }
 
         [HttpPost]
-        public IActionResult Edit([FromRoute] int? id, UpdateEmployeeDto employeeDto)
+        public IActionResult Edit([FromRoute] int? id, EmployeeViewModel employeeViewModel)
         {
-            if (!id.HasValue || id != employeeDto.Id) return BadRequest();
-            if (!ModelState.IsValid) return View(employeeDto);
+            if (!id.HasValue) return BadRequest();
+            if (!ModelState.IsValid) return View(employeeViewModel);
 
             try
             {
+                var employeeDto = new UpdateEmployeeDto()
+                {
+                    Id = id.Value,
+                    Name = employeeViewModel.Name,
+                    Address = employeeViewModel.Address,
+                    Age = employeeViewModel.Age,
+                    Email = employeeViewModel.Email,
+                    EmployeeType = employeeViewModel.EmployeeType,
+                    Gender = employeeViewModel.Gender,
+                    HiringDate = employeeViewModel.HiringDate,
+                    IsActive = employeeViewModel.IsActive,
+                    PhoneNumber = employeeViewModel.PhoneNumber,
+                    Salary = employeeViewModel.Salary,
+                    DepartmentId = employeeViewModel.DepartmentId,
+                };
+
                 var Result = _employeeServices.UpdateEmployee(employeeDto);
                 if (Result > 0)
                 {
@@ -127,7 +185,7 @@ namespace Demo.Presentation.Controllers
                     _logger.LogError(ex.Message);
                 return View("errorModel", ex.Message);
             }
-            return View(employeeDto);
+            return View(employeeViewModel);
         }
         #endregion
 

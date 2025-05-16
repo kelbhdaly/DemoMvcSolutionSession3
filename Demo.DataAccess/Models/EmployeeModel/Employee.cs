@@ -1,4 +1,5 @@
-﻿using Demo.DataAccess.Models.Shared;
+﻿using Demo.DataAccess.Models.DepartmentModel;
+using Demo.DataAccess.Models.Shared;
 using Demo.DataAccess.Models.Shared.Enums;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,8 @@ namespace Demo.DataAccess.Models.EmployeeModel
         public Gender Gender { get; set; }
 
         public EmployeeType EmployeeType { get; set; }
+        public int? DepartmentId { get; set; }
+        public virtual Department?  Department { get; set; }
 
     }
 }

@@ -34,7 +34,7 @@ namespace Demo.BusinessLogic.DataTransferObject.Employee
         public string? PhoneNumber { get; set; }
         [Display(Name = "Hiring Date")]
         public DateOnly HiringDate { get; set; }
-        public int LastModifiedBy { get; set; }//User Id
-        public int CreateBy { get; set; } //User Id
+        
+        public int? DepartmentId { get; set; }
     }
 }

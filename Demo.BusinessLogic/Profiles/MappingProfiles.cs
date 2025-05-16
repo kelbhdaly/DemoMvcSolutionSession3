@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Demo.BusinessLogic.DataTransferObject.Employee;
 using Demo.BusinessLogic.DataTransferObject.EmployeeDto;
+using Demo.DataAccess.Models.DepartmentModel;
 using Demo.DataAccess.Models.EmployeeModel;
 
 namespace Demo.BusinessLogic.Profiles
@@ -11,20 +12,22 @@ namespace Demo.BusinessLogic.Profiles
         {
 
             CreateMap<Employee, EmployeeDto>()
-                .ForMember(dest => dest.Gender, options => options.MapFrom(src => src.Gender))
-                .ForMember(dest => dest.EmployeeType, options => options.MapFrom(src => src.EmployeeType));
-
+                .ForMember(dist => dist.Gender, options => options.MapFrom(src => src.Gender))
+                .ForMember(dist => dist.EmployeeType, options => options.MapFrom(src => src.EmployeeType))
+                .ForMember(dist => dist.Department, options => options.MapFrom(src => src.Department != null ? src.Department.Name : null));
 
             CreateMap<Employee, EmployeeDetailsDto>()
-                .ForMember(dest => dest.Gender, options => options.MapFrom(src => src.Gender))
-                .ForMember(dest => dest.EmployeeType, options => options.MapFrom(src => src.EmployeeType))
-                .ForMember(dest => dest.HiringDate, options => options.MapFrom(src => DateOnly.FromDateTime(src.HiringDate)));
+                .ForMember(dist => dist.Gender, options => options.MapFrom(src => src.Gender))
+                .ForMember(dist => dist.EmployeeType, options => options.MapFrom(src => src.EmployeeType))
+                .ForMember(dist => dist.HiringDate, options => options.MapFrom(src => DateOnly.FromDateTime(src.HiringDate)))
+                .ForMember(dist => dist.Department, options => options.MapFrom(src => src.Department != null ? src.Department.Name : null));
 
             CreateMap<CreateEmployeeDto, Employee>()
-                .ForMember(dest => dest.HiringDate, options => options.MapFrom(src => src.HiringDate.ToDateTime(TimeOnly.MinValue)));
+                .ForMember(dist => dist.HiringDate, options => options.MapFrom(src => src.HiringDate.ToDateTime(TimeOnly.MinValue)))
+                .ForMember(dist => dist.Department, options => options.MapFrom(src => src.Name != null ? src.Name : null));
 
             CreateMap<UpdateEmployeeDto, Employee>()
-                .ForMember(dest => dest.HiringDate, options => options.MapFrom(src => src.HiringDate.ToDateTime(TimeOnly.MinValue)));
+                .ForMember(dist => dist.HiringDate, options => options.MapFrom(src => src.HiringDate.ToDateTime(TimeOnly.MinValue)));
 
         }
     }
