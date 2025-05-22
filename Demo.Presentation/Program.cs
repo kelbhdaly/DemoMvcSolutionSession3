@@ -1,9 +1,12 @@
 using Demo.BusinessLogic.Profiles;
+using Demo.BusinessLogic.Services.Attachment_Service;
 using Demo.BusinessLogic.Services.Classes;
 using Demo.BusinessLogic.Services.Interfaces;
 using Demo.DataAccess.Data.Contexts;
+using Demo.DataAccess.Data.IdentityModel;
 using Demo.DataAccess.Repositories.Classes;
 using Demo.DataAccess.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +14,7 @@ namespace Demo.Presentation
 {
     public class Program
     {
-        
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -23,7 +26,7 @@ namespace Demo.Presentation
                 ));
 
             //builder.Services.AddScoped<ApplicationDbContext>();//2.Register To Services In DI Container
-            builder.Services.AddDbContext<ApplicationDbContext>(options=>
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 //options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
                 //options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["DefaultConnection"]);
@@ -38,12 +41,17 @@ namespace Demo.Presentation
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
             //builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             builder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfiles()));
+            // builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             builder.Services.AddScoped<IUniteOfWork, UniteOfWork>();
+            builder.Services.AddScoped<IAttachmentService, AttachmentService>();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
             #endregion
 
             var app = builder.Build();
 
-          
+
             #region Configure the HTTP request pipeline
             if (!app.Environment.IsDevelopment())
             {
@@ -57,11 +65,11 @@ namespace Demo.Presentation
 
             app.UseRouting();
 
-          
+
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Register}/{id?}");
 
             #endregion
             app.Run();

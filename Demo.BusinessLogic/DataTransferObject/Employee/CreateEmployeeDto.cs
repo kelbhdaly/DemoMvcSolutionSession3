@@ -1,5 +1,6 @@
 ﻿using Demo.DataAccess.Models.EmployeeModel;
 using Demo.DataAccess.Models.Shared.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -35,6 +36,9 @@ namespace Demo.BusinessLogic.DataTransferObject.Employee
         public int LastModifiedBy { get; set; }//User Id
         public int CreateBy { get; set; } //User Id
         public int? DepartmentId { get; set; }
+        public IFormFile? Image { get; set; }
+
+
 
     }
 }

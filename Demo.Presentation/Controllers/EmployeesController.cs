@@ -52,7 +52,7 @@ namespace Demo.Presentation.Controllers
                         Gender = employeeViewModel.Gender,
                         HiringDate = employeeViewModel.HiringDate,
                         DepartmentId = employeeViewModel.DepartmentId,
-
+                        Image = employeeViewModel.Image,
 
                     };
 
@@ -90,7 +90,7 @@ namespace Demo.Presentation.Controllers
 
         public IActionResult Details(int? id)
         {
-            if (!id.HasValue) return BadRequest();
+              if (!id.HasValue) return BadRequest();
             var employee = _employeeServices.GetEmployeeById(id.Value);
             if (employee is null) return NotFound();
             var employeeDetails = new EmployeeViewModel()
@@ -107,7 +107,8 @@ namespace Demo.Presentation.Controllers
                 HiringDate = employee.HiringDate,
                 EmployeeType = Enum.Parse<EmployeeType>(employee.EmployeeType),
                 Gender = Enum.Parse<Gender>(employee.Gender),
-                Department = employee.Department
+                Department = employee.Department,
+                ImageName = employee.Image,
             };
             return View(employeeDetails);
         }
@@ -134,7 +135,8 @@ namespace Demo.Presentation.Controllers
                 HiringDate = employee.HiringDate,
                 Gender = Enum.Parse<Gender>(employee.Gender),
                 EmployeeType = Enum.Parse<EmployeeType>(employee.EmployeeType),
-                DepartmentId = employee.DepartmentId
+                DepartmentId = employee.DepartmentId,
+              ImageName = employee.Image  
             };
             return View(employeeDto);
         }
@@ -161,6 +163,7 @@ namespace Demo.Presentation.Controllers
                     PhoneNumber = employeeViewModel.PhoneNumber,
                     Salary = employeeViewModel.Salary,
                     DepartmentId = employeeViewModel.DepartmentId,
+                    Image = employeeViewModel.Image
                 };
 
                 var Result = _employeeServices.UpdateEmployee(employeeDto);

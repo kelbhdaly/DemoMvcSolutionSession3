@@ -38,5 +38,8 @@ namespace Demo.Presentation.ViewModels.EmployeeViewModel
         public int? DepartmentId { get; set; }
         public string? Department { get; set; }
 
+        public IFormFile? Image { get; set; }
+        public string? ImageName { get; set; }
+
     }
 }

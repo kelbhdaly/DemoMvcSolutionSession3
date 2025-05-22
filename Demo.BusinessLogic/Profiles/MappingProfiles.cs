@@ -20,14 +20,20 @@ namespace Demo.BusinessLogic.Profiles
                 .ForMember(dist => dist.Gender, options => options.MapFrom(src => src.Gender))
                 .ForMember(dist => dist.EmployeeType, options => options.MapFrom(src => src.EmployeeType))
                 .ForMember(dist => dist.HiringDate, options => options.MapFrom(src => DateOnly.FromDateTime(src.HiringDate)))
-                .ForMember(dist => dist.Department, options => options.MapFrom(src => src.Department != null ? src.Department.Name : null));
+                .ForMember(dist => dist.Department, options => options.MapFrom(src => src.Department != null ? src.Department.Name : null))
+                .ForMember(dist => dist.Image , options=>options.MapFrom(src=>src.ImageName)).ReverseMap();
+
 
             CreateMap<CreateEmployeeDto, Employee>()
                 .ForMember(dist => dist.HiringDate, options => options.MapFrom(src => src.HiringDate.ToDateTime(TimeOnly.MinValue)))
-                .ForMember(dist => dist.Department, options => options.MapFrom(src => src.Name != null ? src.Name : null));
+                .ForMember(dist => dist.DepartmentId, options => options.MapFrom(src => src.DepartmentId))
+                .ReverseMap();
 
             CreateMap<UpdateEmployeeDto, Employee>()
-                .ForMember(dist => dist.HiringDate, options => options.MapFrom(src => src.HiringDate.ToDateTime(TimeOnly.MinValue)));
+                .ForMember(dist => dist.HiringDate, options => options.MapFrom(src => src.HiringDate.ToDateTime(TimeOnly.MinValue)))
+                              .ForMember(dist => dist.ImageName, options => options.MapFrom(src => src.Image));
+
+
 
         }
     }

@@ -27,7 +27,9 @@ namespace Demo.Presentation.Controllers
         public IActionResult Create() => View();
 
         [HttpPost]
+       
         public IActionResult Create(DepartmentViewModel departmentViewModel)
+           
         {
             if (ModelState.IsValid) //Server Side Validation 
             {

@@ -1,5 +1,6 @@
 ﻿using Demo.DataAccess.Models.EmployeeModel;
 using Demo.DataAccess.Models.Shared.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,6 +24,6 @@ namespace Demo.BusinessLogic.DataTransferObject.EmployeeDto
         [Display(Name = "Employee Type")]
         public string EmployeeType { get; set; }
         public string? Department { get; set; }
-
+        public IFormFile?  Image { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace Demo.BusinessLogic.Services.Attachment_Service
     public interface IAttachmentService
     {
         //Upload
-        public string Upload(IFormFile file, string FolderName);
+        public string? Upload(IFormFile file, string FolderName);
 
        //Delete
        bool Delete(string filePath);
